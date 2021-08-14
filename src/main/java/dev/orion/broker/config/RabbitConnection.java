@@ -4,31 +4,34 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-import javax.enterprise.context.ApplicationScoped;
+import java.io.IOException;
+import java.util.concurrent.TimeoutException;
 
+public class RabbitConnection {
+        ConnectionFactory factory;
+        Connection connection;
+        Channel channel;
+        String queueName;
+        
+        public RabbitConnection(String queueName) throws IOException, TimeoutException {
+            this.queueName = queueName;
 
-@ApplicationScoped
-public class RabbitConnectionFactory {
-        protected ConnectionFactory factory;
-        protected Connection connection;
-        protected Channel channel;
-        protected String queueName;
-
-
-        public RabbitConnectionFactory(String queueName){
-
-            factory = new ConnectionFactory();
+            this.factory = new ConnectionFactory();
             factory.setUsername("guest");
             factory.setPassword("guest");
             factory.setVirtualHost("/");
             factory.setHost("localhost");
             factory.setPort(5672);
 
+            this.connection = factory.newConnection();
 
+            this.channel = connection.createChannel();
+
+            channel.queueDeclare(queueName,false,false,false,null);
         }
 
-        public ConnectionFactory getConnection(){
-
-            return factory;
+        public void close() throws IOException, TimeoutException {
+            this.channel.close();
+            this.connection.close();
         }
 }
