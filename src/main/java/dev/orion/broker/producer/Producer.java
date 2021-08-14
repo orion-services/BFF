@@ -1,4 +1,6 @@
-package dev.orion.broker.config;
+package dev.orion.broker.producer;
+
+import dev.orion.broker.config.RabbitConnection;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;

@@ -1,15 +1,16 @@
-package dev.orion.broker.config;
+package dev.orion.broker.consumer;
 
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
+import dev.orion.broker.config.RabbitConnection;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
 
-public class Consumer extends RabbitConnection{
+public class Consumer extends RabbitConnection {
     final String queueName;
     public Consumer(String queue) throws IOException, TimeoutException {
         super(queue);

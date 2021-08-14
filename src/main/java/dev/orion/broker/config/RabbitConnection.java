@@ -4,24 +4,30 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+import org.eclipse.microprofile.config.ConfigProvider;
+
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class RabbitConnection {
-        ConnectionFactory factory;
-        Connection connection;
-        Channel channel;
-        String queueName;
+
+public abstract class RabbitConnection {
+        protected ConnectionFactory factory;
+        protected Connection connection;
+        protected Channel channel;
+        protected String queueName;
+
         
-        public RabbitConnection(String queueName) throws IOException, TimeoutException {
+        protected RabbitConnection(String queueName) throws IOException, TimeoutException {
+
             this.queueName = queueName;
 
             this.factory = new ConnectionFactory();
-            factory.setUsername("guest");
-            factory.setPassword("guest");
-            factory.setVirtualHost("/");
-            factory.setHost("localhost");
-            factory.setPort(5672);
+
+            factory.setUsername(ConfigProvider.getConfig().getValue("rabbit.username", String.class));
+            factory.setPassword(ConfigProvider.getConfig().getValue("rabbit.password",String.class));
+            factory.setVirtualHost(ConfigProvider.getConfig().getValue("rabbit.virtualHost",String.class));
+            factory.setHost(ConfigProvider.getConfig().getValue("rabbit.host",String.class));
+            factory.setPort(ConfigProvider.getConfig().getValue("rabbit.port",Integer.class));
 
             this.connection = factory.newConnection();
 
