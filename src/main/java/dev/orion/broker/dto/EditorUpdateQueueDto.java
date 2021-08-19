@@ -10,10 +10,10 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditorUpdateQueueDto {
-    @NotBlank
+
     public String activityUuid;
-    @NotBlank
+
     public String externalUserId;
-    @NotBlank
+
     public String documentContent;
 }

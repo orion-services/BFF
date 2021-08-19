@@ -1,27 +1,34 @@
 package dev.orion.broker.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class EditorQueueDto {
-    public String activityUuid;
+    @NotBlank
+    public String uuid;
+    @NotBlank
     public String externalUserId;
+    @NotBlank
     public String documentContent;
-    public LocalDate date;
+
 
     public EditorQueueDto(){
-        this.date = LocalDate.now();
+
     }
 
-    public EditorQueueDto(String activityUuid, String externalUserId, String documentContent) {
-        this.activityUuid = activityUuid;
+    public EditorQueueDto(String uuid, String externalUserId, String documentContent) {
+        this.uuid = uuid;
         this.externalUserId = externalUserId;
         this.documentContent = documentContent;
-        this.date = LocalDate.now();
     }
 }

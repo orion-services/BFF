@@ -14,3 +14,6 @@ api:
   activity-service:
     "client/mp-rest/url": "https://bd8c98b98e20.ngrok.io/"
 
+quarkus:
+  jackson:
+    write-dates-as-timestamps: true

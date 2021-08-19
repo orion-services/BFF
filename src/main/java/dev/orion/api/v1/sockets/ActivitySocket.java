@@ -1,9 +1,11 @@
 package dev.orion.api.v1.sockets;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dev.orion.api.v1.sockets.room.ActivityRoom;
+import dev.orion.broker.dto.EditorQueueDto;
 import dev.orion.broker.dto.EditorUpdateQueueDto;
 import dev.orion.broker.producer.EditorQueueProducer;
 
@@ -11,8 +13,7 @@ import dev.orion.broker.producer.EditorQueueProducer;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+
 import javax.validation.ValidatorFactory;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -20,9 +21,6 @@ import javax.websocket.server.ServerEndpoint;
 
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 
@@ -50,13 +48,15 @@ public class ActivitySocket {
 
     @OnError
     public void onError(Session session, @PathParam("uuidUser") String userUuid,@PathParam("uuidActivity") String activityUuid, Throwable throwable) {
+        System.out.println(throwable);
         activityRoom.removeUserFromRoom(UUID.fromString(activityUuid),UUID.fromString(userUuid),session);
     }
 
     @OnMessage
     public void onMessage(String message, @PathParam("uuidActivity")String activityUuid) throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        EditorUpdateQueueDto editorUpdateQueueDto = objectMapper.readValue(message,EditorUpdateQueueDto.class);
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
+        EditorQueueDto editorQueueDto = objectMapper.readValue(message,EditorQueueDto.class);
         //Validation isn't working yet
 //        var validator = validatorFactory.getValidator();
 //        Set<ConstraintViolation<EditorUpdateQueueDto>> errorList =  validator.validate(editorUpdateQueueDto, EditorUpdateQueueDto.class);
@@ -64,7 +64,7 @@ public class ActivitySocket {
 //
 //            return;
 //        }
-        editorQueueProducer.sendMessage(editorUpdateQueueDto);
+        editorQueueProducer.sendMessage(editorQueueDto);
         activityRoom.broadcast(message,UUID.fromString(activityUuid));
     }
 
