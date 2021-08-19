@@ -7,6 +7,9 @@ import com.rabbitmq.client.ConnectionFactory;
 import org.eclipse.microprofile.config.ConfigProvider;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 
@@ -16,18 +19,21 @@ public abstract class RabbitConnection {
         protected Channel channel;
         protected String queueName;
 
+
+
         
-        protected RabbitConnection(String queueName) throws IOException, TimeoutException {
+        protected RabbitConnection(String queueName) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
             this.queueName = queueName;
 
             this.factory = new ConnectionFactory();
 
-            factory.setUsername(ConfigProvider.getConfig().getValue("rabbit.username", String.class));
-            factory.setPassword(ConfigProvider.getConfig().getValue("rabbit.password",String.class));
-            factory.setVirtualHost(ConfigProvider.getConfig().getValue("rabbit.virtualHost",String.class));
-            factory.setHost(ConfigProvider.getConfig().getValue("rabbit.host",String.class));
-            factory.setPort(ConfigProvider.getConfig().getValue("rabbit.port",Integer.class));
+//            factory.setUsername(ConfigProvider.getConfig().getValue("rabbit.username", String.class));
+//            factory.setPassword(ConfigProvider.getConfig().getValue("rabbit.password",String.class));
+//            factory.setVirtualHost(ConfigProvider.getConfig().getValue("rabbit.virtualHost",String.class));
+//            factory.setHost(ConfigProvider.getConfig().getValue("rabbit.host",String.class));
+//            factory.setPort(ConfigProvider.getConfig().getValue("rabbit.port",Integer.class));
+              factory.setUri(ConfigProvider.getConfig().getValue("rabbit.host",String.class));
 
             this.connection = factory.newConnection();
 

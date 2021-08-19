@@ -1,16 +1,16 @@
 rabbit:
-  username: guest
-  password: guest
-  virtualHost: /
-  host: localhost
-  port: 5672
+  username: "fkshhfzz"
+  password: "6N0TL9ZCFHIrhIxxc6b7QvRmye0TIgS3"
+  virtualHost: "fkshhfzz"
+  host: amqp://fkshhfzz:6N0TL9ZCFHIrhIxxc6b7QvRmye0TIgS3@cattle.rmq2.cloudamqp.com/fkshhfzz
+  port: 8883
   queue:
-    activity-consumer: activity-update
+    consumer:
+      activity: "activity-update"
     producer:
-      editor:
-        exchange: excvhte
-        queue: ""
+      exchange: ""
+      editor: "document-edit"
 api:
   activity-service:
-      "client/mp-rest/url": "https://e8a545fd82c2.ngrok.io/"
+    "client/mp-rest/url": "https://bd8c98b98e20.ngrok.io/"
 
