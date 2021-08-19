@@ -1,30 +1,54 @@
 package dev.orion.broker.consumer;
 
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rabbitmq.client.*;
+import dev.orion.api.v1.sockets.room.ActivityRoom;
 import dev.orion.broker.config.RabbitConnection;
+import dev.orion.broker.dto.ActivityUpdateQueueDto;
+import org.eclipse.microprofile.config.ConfigProvider;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
+@Singleton
+public class ActivityConsumer extends RabbitConnection {
+    @Inject
+    ActivityRoom activityRoom;
 
-public class Consumer extends RabbitConnection {
-    final String queueName;
-    public Consumer(String queue) throws IOException, TimeoutException {
-        super(queue);
-        this.queueName = queue;
+    final static String queueName = ConfigProvider.getConfig().getValue("rabbit.queue.consumer.activity", String.class);
+    final Boolean autoAck = true;
+
+    public ActivityConsumer() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        this(queueName);
+
     }
 
-    public void getMessage() throws IOException {
-        DefaultConsumer consumer = new DefaultConsumer(super.channel) {
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                String mensagem = new String(body, StandardCharsets.UTF_8);
-                System.out.println(mensagem);
-            }
+    public ActivityConsumer(String queue) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+        super(queue);
+        this.attachQueueListener();
+
+    }
+    DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.writeValueAsString(delivery);
+        var message = objectMapper.readValue(delivery.getBody(), ActivityUpdateQueueDto.class);
+
+        System.out.println(" [x] Received '" + message + "'");
+        try {
+        //
+        } finally {
+            System.out.println(" [x] Done");
         };
-        channel.basicConsume(queueName,consumer);
+    };
+
+
+    public void attachQueueListener() throws IOException {
+        channel.basicConsume(queueName, autoAck, deliverCallback, consumerTag -> {});
     }
 }

@@ -1,4 +1,4 @@
-package dev.orion.service.dto;
+package dev.orion.api.v1.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

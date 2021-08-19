@@ -1,9 +1,8 @@
-package dev.orion.service;
+package dev.orion.api.v1.client;
 
+import dev.orion.api.v1.dto.ActivityCreatedDto;
 import dev.orion.api.v1.dto.AddUserActivityDto;
-import dev.orion.service.dto.ActivityCreatedDto;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-import org.jboss.resteasy.annotations.Body;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.*;
@@ -16,7 +15,7 @@ public interface ActivityClient {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    String createActivity(AddUserActivityDto dto);
+    ActivityCreatedDto createActivity(AddUserActivityDto dto);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

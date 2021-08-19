@@ -46,6 +46,7 @@ public class ActivityRoom {
                 .ofNullable(rooms.get(activityUuid)).orElse(new ConcurrentHashMap<>());
 
         sessionMap.remove(userUuid, session);
+        logger.info(MessageFormat.format("User {0} removed from activity {1}", userUuid, activityUuid));
     }
 
 
