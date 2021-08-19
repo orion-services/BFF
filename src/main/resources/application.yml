@@ -1,0 +1,16 @@
+rabbit:
+  username: guest
+  password: guest
+  virtualHost: /
+  host: localhost
+  port: 5672
+  queue:
+    activity-consumer: activity-update
+    producer:
+      editor:
+        exchange: excvhte
+        queue: ""
+api:
+  activity-service:
+      "client/mp-rest/url": "https://e8a545fd82c2.ngrok.io/"
+
