@@ -1,4 +1,4 @@
-# bff Project
+# orion-bff-service Project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
