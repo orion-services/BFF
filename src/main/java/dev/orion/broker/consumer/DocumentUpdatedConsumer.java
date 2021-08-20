@@ -1,19 +1,17 @@
 package dev.orion.broker.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.DeliverCallback;
 import dev.orion.api.v1.sockets.room.ActivityRoom;
 import dev.orion.broker.config.RabbitConnection;
-import dev.orion.broker.dto.ActivityUpdateQueueDto;
+import dev.orion.broker.dto.EditorUpdateQueueDto;
 import io.quarkus.arc.log.LoggerName;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.jboss.logging.Logger;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.io.IOException;
-
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -21,32 +19,31 @@ import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.concurrent.TimeoutException;
 
+
 @ApplicationScoped
-public class ActivityConsumer extends RabbitConnection {
+public class DocumentUpdatedConsumer extends RabbitConnection {
     @Inject
     ActivityRoom activityRoom;
 
     @LoggerName("DocumentEditorConsumer")
     Logger logger;
 
-    final static String queueName = ConfigProvider.getConfig().getValue("rabbit.queue.consumer.activity", String.class);
-    final Boolean autoAck = false;
+    final static String queueName = ConfigProvider.getConfig().getValue("rabbit.queue.consumer.document", String.class);
+    final Boolean autoAck = true;
     private Boolean hasStarted = false;
-    public ActivityConsumer() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    public DocumentUpdatedConsumer() throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         this(queueName);
-
     }
 
-    public ActivityConsumer(String queue) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    public DocumentUpdatedConsumer(String queue) throws IOException, TimeoutException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
         super(queue);
     }
 
     DeliverCallback deliverCallback = (consumerTag, delivery) -> {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValueAsString(delivery);
-        var message = objectMapper.readValue(delivery.getBody(), ActivityUpdateQueueDto.class);
+        var message = objectMapper.readValue(delivery.getBody(), EditorUpdateQueueDto.class);
 
-        activityRoom.broadcast(message.toString(), message.uuid);
+        activityRoom.broadcast(objectMapper.writeValueAsString(message), UUID.fromString(message.activityUuid));
     };
 
 
