@@ -1,10 +1,9 @@
 package dev.orion.api.v1.resource;
 
-
 import dev.orion.api.v1.dto.ActivityCreatedDto;
 import dev.orion.api.v1.dto.AddUserActivityDto;
 import dev.orion.api.v1.client.ActivityClient;
-import dev.orion.api.v1.mappers.models.DefaultErrorResponse;
+import dev.orion.api.v1.model.Activity;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -24,31 +23,9 @@ public class ActivityResourceV1 {
         @POST
         @Consumes(MediaType.APPLICATION_JSON)
         @Produces(MediaType.APPLICATION_JSON)
-        public Response createActivity(@Valid AddUserActivityDto dto){
-            ActivityCreatedDto activityCreatedDto = activityIntegrationService.createActivity(dto);
-
-            return Response.accepted(Response.Status.CREATED).entity(activityCreatedDto).build();
+        public Response createActivity(@Valid AddUserActivityDto dto) {
+                ActivityCreatedDto addUserActivityDto = activityIntegrationService.createActivity(dto);
+                return Response.accepted().entity(addUserActivityDto).build();
         }
-        @GET
-        @Produces(MediaType.TEXT_PLAIN)
-        public String document(){
-            return "activityIntegrationService.document();";
-        }
-
-
-//    @GET
-//    @Path("/{activityUuid}")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response findActivity(@PathParam("activityUuid") String activityUuid) {
-//        return null;
-//    }
-//
-//    @POST
-//    @Path("/{activityUuid}/addUser")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response addUserToActivity(@Valid AddUserActivityDto addUserToActivityRequestDtoV1, @PathParam("activityUuid") String activityUuid) {
-//        return null;
-//    }
 
 }

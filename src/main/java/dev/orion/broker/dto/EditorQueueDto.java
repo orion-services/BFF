@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 
 
 public class EditorQueueDto {
-    @NotBlank
     public String uuid;
-    @NotBlank
     public String externalUserId;
     @NotBlank
     public String documentContent;
@@ -29,6 +27,30 @@ public class EditorQueueDto {
     public EditorQueueDto(String uuid, String externalUserId, String documentContent) {
         this.uuid = uuid;
         this.externalUserId = externalUserId;
+        this.documentContent = documentContent;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getExternalUserId() {
+        return externalUserId;
+    }
+
+    public void setExternalUserId(String externalUserId) {
+        this.externalUserId = externalUserId;
+    }
+
+    public String getDocumentContent() {
+        return documentContent;
+    }
+
+    public void setDocumentContent(String documentContent) {
         this.documentContent = documentContent;
     }
 }

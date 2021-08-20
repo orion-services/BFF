@@ -5,11 +5,12 @@ import java.text.MessageFormat;
 
 public class AddUserActivityDto {
     @NotBlank(message = "userId must be not empty/blank")
-    public String userId;
+    public String userExternalId;
 
-    public AddUserActivityDto(){}
+    public AddUserActivityDto() {
+    }
 
-    public AddUserActivityDto(String userId){
-        this.userId= userId;
+    public AddUserActivityDto(String userExternalId) {
+        this.userExternalId = userExternalId;
     }
 }
