@@ -2,17 +2,18 @@ rabbit:
   username: "fkshhfzz"
   password: "6N0TL9ZCFHIrhIxxc6b7QvRmye0TIgS3"
   virtualHost: "fkshhfzz"
-  host: amqp://fkshhfzz:6N0TL9ZCFHIrhIxxc6b7QvRmye0TIgS3@cattle.rmq2.cloudamqp.com/fkshhfzz
+  host: amqp://fkshhfzz:GI-YCCwojIlQ1zY749-XKwMHIFEsAqCh@cattle.rmq2.cloudamqp.com/fkshhfzz
   port: 8883
   queue:
     consumer:
       activity: "activity-update"
+      document: "document-update"
     producer:
       exchange: ""
       editor: "document-edit"
 api:
   activity-service:
-    "client/mp-rest/url": "https://bd8c98b98e20.ngrok.io/"
+    "client/mp-rest/url": "https://8747ce6fbff7.ngrok.io"
 
 quarkus:
   jackson:
